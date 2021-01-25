@@ -1,0 +1,27 @@
+name: JOY挂机
+
+on:
+    workflow_dispatch:
+    schedule:
+        - cron: "0 */6 * * *"
+    watch:
+        types: [started]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        if: github.event.repository.owner.id == github.event.sender.id
+        steps:
+            - uses: actions/checkout@v1
+            - name: Use Node.js 12.x
+              uses: actions/setup-node@v1
+              with:
+                  node-version: 12.x
+            - name: npm install
+              run: |
+                  npm install
+            - name: "运行【JOY挂机】"
+              run: |
+                  node jd_crazy_joy_coin.js
+              env:
+                  JD_COOKIE: ${{ secrets.JD_COOKIE }}
